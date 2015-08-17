@@ -7,16 +7,21 @@ import (
 	"testing"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 var _ = Describe("Parse feature", func() {
 
-	AfterEach(func(){
-		err := os.Remove("./input.feature")
-		Expect(err).To(BeNil())
+	AfterEach(func() {
+		if _, err := os.Stat("./input.feature"); err == nil {
+			err = os.Remove("./input.feature")
+			Expect(err).To(BeNil())
+		}
 
-		err = os.Remove("./output.tex")
-		Expect(err).To(BeNil())
+		if _, err := os.Stat("./output.tex"); err == nil {
+			err = os.Remove("./output.tex")
+			Expect(err).To(BeNil())
+		}
 	})
 
 
@@ -35,7 +40,18 @@ var _ = Describe("Parse feature", func() {
 		Expect(err).To(BeNil())
 		Expect(string(data)).To(Equal("some feature description"))
 	})
+
+	FIt("Feature name is displayed as section in the tex file", func() {
+		err := parseFeature.FromFileName("../../integrationTests/testFiles/feature/login.feature")
+		Expect(err).To(BeNil())
+
+		outputTexFileData, err := ioutil.ReadFile("./output.tex")
+		Expect(err).To(BeNil())
+
+		Expect(strings.Contains(string(outputTexFileData), "\\section{Feature: Login}")).To(BeTrue())
+	})
 })
+
 
 func Test(t *testing.T) {
 	RegisterFailHandler(Fail)

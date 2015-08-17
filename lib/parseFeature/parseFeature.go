@@ -5,14 +5,18 @@ import (
 )
 
 func FromFileName(fileName string) (err error) {
-	data, err := ioutil.ReadFile(fileName)
+	inputFileContent, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return err
 	}
 
 	openedFile, err := os.Create("./output.tex")
-	_, err = openedFile.WriteString(string(data))
+	_, err = openedFile.WriteString(assembleTexFile(string(inputFileContent)))
 	openedFile.Close()
 
 	return err
+}
+
+func assembleTexFile (inputFileContent string) (string) {
+	return "\\section{" + inputFileContent + "}"
 }
