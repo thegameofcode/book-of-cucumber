@@ -1,0 +1,10 @@
+dependencies:
+  pre:
+    - go get github.com/onsi/ginkgo/ginkgo
+    - go get github.com/onsi/gomega
+    - go get github.com/thegameofcode/book-of-cucumber
+  post:
+    - rm -r ~/.gradle
+test:
+  override:
+    - go test ./...
