@@ -6,9 +6,15 @@ import (
 	"github.com/thegameofcode/book-of-cucumber/lib/createTexFile"
 	"testing"
 	"io/ioutil"
+	"os"
 )
 
 var _ = Describe("Create tex file", func() {
+	AfterEach(func(){
+		err := os.Remove("./output.tex")
+		Expect(err).To(BeNil())
+	})
+
 	It("A file should be created", func() {
 		err := createTexFile.WithData("abc")
 		Expect(err).To(BeNil())
